@@ -1,4 +1,5 @@
 /*Por Débora Bianca Taveira de Moura
+O Código foi feito com o auxílio dos links referenciados abaixo
 Referências: 	http://ces33.wikidot.com/relas:misael-barbeiro
                 http://ces33.blogspot.com/2009/05/o-problema-do-barbeiro-dorminhoco-com_07.html
 COMO EXECUTAR:  1º possuir todas as bibliotecas necessárias;
