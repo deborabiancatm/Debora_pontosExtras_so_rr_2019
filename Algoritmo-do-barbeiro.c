@@ -14,38 +14,13 @@ COMO EXECUTAR:  1º possuir todas as bibliotecas necessárias;
 #include "pthread.h"
 #include "semaphore.h"
 
-#define CHAIRS 3                /* número de cadeiras*/
+#define CADEIRAS 3                /* número de cadeiras*/
 #define TRUE 1
 
 sem_t customers;                /* clientes esperando de atendimento */
 sem_t barbers;                  /* número de barbeiros à espera de clientes */
 sem_t mutex;                    /* para exclusão mútua */
 int waiting = 0;                /* clientes que estão esperando (não estão cortando) */
-
-/* funcoes */
-void* barber(void *arg);
-void* customer(void *arg);
-void cut_hair();
-void customer_arrived();
-void get_haircut();
-void giveup_haircut();
-void barber_sleep();
-void barber_wakeup();
-
-int main() {
-    sem_init(&customers, TRUE, 0);
-    sem_init(&barbers, TRUE, 0);
-    sem_init(&mutex, TRUE, 1);
-    pthread_t b, c;
-     /* criando barbeiro */
-     pthread_create(&b, NULL, (void *) barber, NULL);
-     /* criação de clientes */
-    while(TRUE) {
-        pthread_create(&c, NULL, (void *) customer, NULL);
-        sleep(1);
-    }
-    return 0;
-}
 
 void* barber(void *arg) {
 	while(TRUE) {
@@ -62,7 +37,7 @@ void* barber(void *arg) {
 void* customer(void *arg) {
 	sem_wait(&mutex);
 
-	if(waiting < CHAIRS) {      /* se não houver cadeiras vazias, saia */
+	if(waiting < CADEIRAS) {      /* se não houver cadeiras vazias, saia */
 		customer_arrived();
 		waiting++;              /* incrementa o contador de clientes à espera */
 		sem_post(&customers);   /* acorda o barbeiro se necessário */
@@ -90,4 +65,19 @@ void get_haircut() {
 
 void giveup_haircut() {
 	printf("O salao esta cheio :[\n");
+}
+
+int main() {
+    sem_init(&customers, TRUE, 0);
+    sem_init(&barbers, TRUE, 0);
+    sem_init(&mutex, TRUE, 1);
+    pthread_t b, c;
+     /* criando barbeiro */
+     pthread_create(&b, NULL, (void *) barber, NULL);
+     /* criação de clientes */
+    while(TRUE) {
+        pthread_create(&c, NULL, (void *) customer, NULL);
+        sleep(1);
+    }
+    return 0;
 }
